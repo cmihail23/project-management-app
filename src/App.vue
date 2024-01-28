@@ -1,12 +1,22 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
+  <div hidden>
+    <LoginForm />
+  </div>
+  <div >
+    <MainPage />
+  </div>
 </template>
 
 <script>
 
+import LoginForm from './components/LoginForm.vue'
+import MainPage from './components/MainPage.vue'
+
 export default {
   name: 'App',
   components: {
+    LoginForm,
+    MainPage
   }
 }
 </script>
@@ -18,6 +28,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  /* padding-top: 60px; */
 }
 </style>
