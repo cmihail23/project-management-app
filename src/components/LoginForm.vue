@@ -8,10 +8,10 @@
                 </v-card-item>
                 <v-card-text>
                     <v-form fast-fail>
-                        <v-text-field v-model="username" label="User Name"></v-text-field>
+                        <v-text-field v-model="userEmail" label="Email"></v-text-field>
                         <v-text-field v-model="password" label="Password" type="password"></v-text-field>
 
-                        <v-btn type="submit" color="primary" block class="mt-2">Sign in</v-btn>
+                        <v-btn type="submit" color="primary" block class="mt-2" v-on:click.prevent="login()">Sign in</v-btn>
 
                     </v-form>
                     <div class="mt-2">
@@ -24,16 +24,34 @@
 </template>
   
 <script>
+import axios from "axios";
+
 export default {
     name: 'LoginForm',
     data() {
         return {
-            username: '',
+            userEmail: '',
             password: ''
         };
+    }, methods: {
+        async login() {
+            if (this.userEmail == "" || this.password == "") {
+                console.log("userEmail and Password can not be empty")
+            } else {
+                const { data } = await axios.post(
+                    "http://localhost:3000/users/login",
+                    {
+                        userEmail: this.userEmail,
+                        password: this.password,
+                    }
+                );
+                console.log(data)
+            }
+        }
     },
+
+
 };
 </script>
   
-<style scoped>
-</style>
+<style scoped></style>

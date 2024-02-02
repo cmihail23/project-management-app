@@ -1,22 +1,17 @@
 <template>
-  <div hidden>
+  <div>
     <LoginForm />
-  </div>
-  <div >
-    <MainPage />
   </div>
 </template>
 
 <script>
 
 import LoginForm from './components/LoginForm.vue'
-import MainPage from './components/MainPage.vue'
 
 export default {
   name: 'App',
   components: {
-    LoginForm,
-    MainPage
+    LoginForm
   }
 }
 </script>
