@@ -4,14 +4,15 @@
             <h1>Project management app</h1>
             <v-card variant="elevated" color="indigo">
                 <v-card-item>
-                    <v-card-title>Login</v-card-title>
+                    <v-card-title>SIGNUP</v-card-title>
                 </v-card-item>
                 <v-card-text>
                     <v-form fast-fail>
                         <v-text-field v-model="userEmail" label="Email"></v-text-field>
                         <v-text-field v-model="password" label="Password" type="password"></v-text-field>
+                        <v-text-field v-model="repeatPassword" label="Repeat password" type="password"></v-text-field>
 
-                        <v-btn type="submit" color="primary" block class="mt-2" v-on:click.prevent="login()">Sign in</v-btn>
+                        <v-btn type="submit" color="primary" block class="mt-2" v-on:click.prevent="signup()">Sign in</v-btn>
 
                     </v-form>
                     <div class="mt-2">
@@ -27,19 +28,23 @@
 import axios from "axios";
 
 export default {
-    name: 'LoginForm',
+    name: 'SignupPage',
     data() {
         return {
             userEmail: '',
-            password: ''
+            password: '',
+            repeatPassword: ''
         };
     }, methods: {
-        async login() {
+        async signup() {
             if (this.userEmail == "" || this.password == "") {
                 console.log("userEmail and Password can not be empty")
-            } else {
+            } else if (this.password != this.repeatPassword) {
+                console.log("Passwords are not the same")
+            }
+            else {
                 const { data } = await axios.post(
-                    "http://localhost:3000/users/login",
+                    "http://localhost:3000/users/signup",
                     {
                         userEmail: this.userEmail,
                         password: this.password,

@@ -3,7 +3,7 @@
         <v-container fill-heights>
             <v-row>
                 <v-col>
-                    <v-card hover variant="elevated" color="indigo-darken-2" href="/">
+                    <v-card hover variant="elevated" color="indigo-darken-2" href="/projects">
                         <v-card-item>
                             <v-card-title><span>
                                     <h2>Projects</h2>
@@ -15,7 +15,7 @@
                     </v-card>
                 </v-col>
                 <v-col>
-                    <v-card hover variant="elevated" color="indigo-darken-2" href="/">
+                    <v-card hover variant="elevated" color="indigo-darken-2" href="/employees">
                         <v-card-item>
                             <v-card-title><span>
                                     <h2>Employees</h2>
@@ -39,6 +39,9 @@ export default {
         return {
 
         };
+    },
+    methods: {
+
     },
 };
 </script>
