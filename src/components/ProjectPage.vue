@@ -1,17 +1,25 @@
 <template>
     <div>
         <v-container>
-            <h1>Project: </h1>
-            <v-card variant="elevated" color="indigo">
+            <h1>Project: {{ this.project.projectName }} </h1>
+            <v-card variant="elevated" color="indigo" class="mt-2">
                 <v-card-item>
-                    <v-card-title>{{ this.project.projectName }}</v-card-title>
+                    <v-card-title></v-card-title>
                 </v-card-item>
                 <v-card-text>
-                    <v-form fast-fail>
-
-
-                        <v-btn type="submit" color="primary" block class="mt-2" v-on:click.prevent="signup()">Save</v-btn>
-
+                    <v-form fast-fail v-model="this.form">
+                        <v-text-field v-model="this.project.projectName" label="Project Name"></v-text-field>
+                        <v-text-field v-model="this.project.projectDescription" label="Project Description"></v-text-field>
+                        <v-text-field v-model="this.project.projectStartDate" label="Project Start Date"
+                            type="date"></v-text-field>
+                        <v-text-field v-model="this.project.projectEndDate" label="Project End Date"
+                            type="date"></v-text-field>
+                        <v-text-field v-model="this.project.projectRevenue" label="Project Revenue"
+                            type="number"></v-text-field>
+                        <v-btn v-if="this.isAdd" type="submit" color="primary" block class="mt-2"
+                            v-on:click.prevent="addProject()">Add</v-btn>
+                        <v-btn v-else type="submit" color="primary" block class="mt-2"
+                            v-on:click.prevent="editProject()">Edit</v-btn>
                     </v-form>
                 </v-card-text>
             </v-card>
@@ -25,20 +33,56 @@ import axios from "axios";
 export default {
     data() {
         return {
-            projectId: "",
-            project: {}
+            projectId: this.$route.params.id,
+            project: {},
+            form: false,
+            isAdd: false
         };
-    }, mounted() {
-        if (this.projectId)
+    }, methods: {
+        convertFirestoreDateToVuetifyDate(firestoreDateString) {
+            var firestoreDate = new Date(firestoreDateString);
+            const year = firestoreDate.getFullYear();
+            const month = String(firestoreDate.getMonth() + 1).padStart(2, '0');
+            const day = String(firestoreDate.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        },
+        addProject() {
+            var newProject = {
+                ...this.project,
+                projectStartDate: new Date(this.project.projectStartDate),
+                projectEndDate: new Date(this.project.projectEndDate),
+            };
+            axios.post('http://localhost:3000/projects', newProject)
+                .then(res => { console.log(res) })
+                .catch(error => { console.log(error) })
+        },
+        editProject() {
+            var editedProject = {
+                ...this.project,
+                projectStartDate: new Date(this.project.projectStartDate),
+                projectEndDate: new Date(this.project.projectEndDate),
+            };
+            axios.put(`http://localhost:3000/projects/${this.projectId}`, editedProject)
+                .then(res => { console.log(res) })
+                .catch(error => { console.log(error) })
+        }
+    },
+    mounted() {
+        if (this.projectId) {
             axios.get(`http://localhost:3000/projects/${this.projectId}`)
                 .then(response => {
-                    console.log(response)
-                    console.log("Am primit raspund pe mounted" + response.data)
-                    this.project = response.data;
+                    this.project = {
+                        ...response.data,
+                        projectStartDate: this.convertFirestoreDateToVuetifyDate(response.data.projectStartDate),
+                        projectEndDate: this.convertFirestoreDateToVuetifyDate(response.data.projectEndDate)
+                    };
                 })
                 .catch(error => {
                     console.log(error)
                 });
+        } else {
+            this.isAdd = true;
+        }
     }
 };
 </script>

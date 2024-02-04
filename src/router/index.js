@@ -31,9 +31,16 @@ const routes = [
     component: ProjectsPage
   },
   {
-    path: '/project',
-    name: 'project',
-    component: ProjectPage
+    path: '/projects/edit/:id',
+    name: 'ProjectPageEdit',
+    component: ProjectPage,
+    props: { isAdd: false } // Pass route params as props to the component
+  },
+  {
+    path: '/projects/add',
+    name: 'ProjectPageAdd',
+    component: ProjectPage,
+    props: { isAdd: true } // Pass route params as props to the component
   },
   {
     path: '/employees',
