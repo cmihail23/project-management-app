@@ -9,7 +9,6 @@ import ProjectPage from '../components/ProjectPage.vue'
 
 
 
-
 const routes = [
   {
     path: '/',

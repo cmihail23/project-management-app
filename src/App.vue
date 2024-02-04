@@ -1,10 +1,28 @@
 <template>
-  <!-- <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav> -->
-  <router-view/>
+  <v-app>
+    <v-toolbar app color="primary">
+      <v-toolbar-items>
+        <v-btn text href="/projects">Projects</v-btn>
+        <v-btn text href="/employees">Employees</v-btn>
+      </v-toolbar-items>
+      <v-spacer></v-spacer>
+      <v-btn text href="/">Logout</v-btn>
+    </v-toolbar>
+    <v-content>
+      <router-view />
+    </v-content>
+  </v-app>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+
+    };
+  }
+};
+</script>
 
 <style>
 #app {
