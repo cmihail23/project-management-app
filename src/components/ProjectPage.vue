@@ -16,6 +16,9 @@
                             type="date"></v-text-field>
                         <v-text-field v-model="this.project.projectRevenue" label="Project Revenue"
                             type="number"></v-text-field>
+                        <v-select label="Angajati" :items="employees" item-value="id" item-title="employeeName"
+                            v-model="this.selectedEmployees" multiple></v-select>
+
                         <v-btn v-if="this.isAdd" type="submit" color="primary" block class="mt-2"
                             v-on:click.prevent="addProject()">Add</v-btn>
                         <v-btn v-else type="submit" color="primary" block class="mt-2"
@@ -35,6 +38,8 @@ export default {
         return {
             projectId: this.$route.params.id,
             project: {},
+            employees: [],
+            selectedEmployees: [],
             form: false,
             isAdd: false
         };
@@ -51,11 +56,13 @@ export default {
                 ...this.project,
                 projectStartDate: new Date(this.project.projectStartDate),
                 projectEndDate: new Date(this.project.projectEndDate),
+                employees: this.selectedEmployees
             };
             axios.post('http://localhost:3000/projects', newProject)
                 .then(res => {
                     console.log(res)
-                    this.$router.push('/projects/edit/' + res.data.id) })
+                    this.$router.push('/projects/edit/' + res.data.id)
+                })
                 .catch(error => { console.log(error) })
         },
         editProject() {
@@ -63,7 +70,9 @@ export default {
                 ...this.project,
                 projectStartDate: new Date(this.project.projectStartDate),
                 projectEndDate: new Date(this.project.projectEndDate),
+                employees: this.selectedEmployees
             };
+            console.log(editedProject.employees)
             axios.put(`http://localhost:3000/projects/${this.projectId}`, editedProject)
                 .then(res => { console.log(res) })
                 .catch(error => { console.log(error) })
@@ -76,8 +85,10 @@ export default {
                     this.project = {
                         ...response.data,
                         projectStartDate: this.convertFirestoreDateToVuetifyDate(response.data.projectStartDate),
-                        projectEndDate: this.convertFirestoreDateToVuetifyDate(response.data.projectEndDate)
+                        projectEndDate: this.convertFirestoreDateToVuetifyDate(response.data.projectEndDate),
+                        employees: response.data.employees
                     };
+                    this.selectedEmployees = this.project.employees;
                 })
                 .catch(error => {
                     console.log(error)
@@ -85,6 +96,14 @@ export default {
         } else {
             this.isAdd = true;
         }
+        axios.get('http://localhost:3000/employees')
+            .then(response => {
+                this.employees = response.data;
+                console.log(this.employees)
+            })
+            .catch(error => {
+                console.log(error)
+            });
     }
 };
 </script>
