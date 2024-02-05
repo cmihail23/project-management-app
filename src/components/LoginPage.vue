@@ -38,15 +38,20 @@ export default {
             if (this.userEmail == "" || this.password == "") {
                 console.log("userEmail and Password can not be empty")
             } else {
-                const { data } = await axios.post(
-                    "http://localhost:3000/users/login",
-                    {
-                        userEmail: this.userEmail,
-                        password: this.password,
-                    }
-                );
-                console.log(data)
-                this.$router.push("/home")
+                try {
+                    const { data } = await axios.post(
+                        "http://localhost:3000/users/login",
+                        {
+                            userEmail: this.userEmail,
+                            password: this.password,
+                        }
+                    )
+                    console.log(data)
+                    this.$router.push("/home")
+                } catch (error) {
+                    console.log(error)
+                    alert("Problema la log-in:" + error)
+                }
             }
         }
     },
