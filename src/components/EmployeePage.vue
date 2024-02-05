@@ -7,18 +7,21 @@
                     <v-card-title></v-card-title>
                 </v-card-item>
                 <v-card-text>
-                    <v-form fast-fail v-model="this.form">
-                        <v-text-field v-model="this.employee.employeeName" label="Employee Name"></v-text-field>
-                        <v-text-field v-model="this.employee.employeeEmail" label="Employee Email"></v-text-field>
-                        <v-text-field v-model="this.employee.employeePhoneNumber"
-                            label="Employee phone number"></v-text-field>
-                        <v-text-field v-model="this.employee.department" label="Employee department"></v-text-field>
-                        <v-text-field v-model="this.employee.employeedDate" label="Employeed date"
-                            type="date"></v-text-field>
+                    <v-form fast-fail v-model="this.form" ref="form">
+                        <v-text-field :rules="[v => !!v || 'Error: Please enter name']" v-model="this.employee.employeeName"
+                            label="Employee Name"></v-text-field>
+                        <v-text-field :rules="[v => !!v || 'Error: Please enter email']"
+                            v-model="this.employee.employeeEmail" label="Employee Email"></v-text-field>
+                        <v-text-field :rules="[v => !!v || 'Error: Please enter phone number']"
+                            v-model="this.employee.employeePhoneNumber" label="Employee phone number"></v-text-field>
+                        <v-text-field :rules="[v => !!v || 'Error: Please enter department']"
+                            v-model="this.employee.department" label="Employee department"></v-text-field>
+                        <v-text-field :rules="[v => !!v || 'Error: Please enter employed date']"
+                            v-model="this.employee.employeedDate" label="Employeed date" type="date"></v-text-field>
                         <v-btn v-if="this.isAdd" type="submit" color="primary" block class="mt-2"
-                            v-on:click.prevent="addEmployee()">Add</v-btn>
+                            v-on:click="addEmployee()">Add</v-btn>
                         <v-btn v-else type="submit" color="primary" block class="mt-2"
-                            v-on:click.prevent="editProject()">Edit</v-btn>
+                            v-on:click="editEmployee()">Edit</v-btn>
                     </v-form>
                 </v-card-text>
             </v-card>
@@ -46,25 +49,37 @@ export default {
             return `${year}-${month}-${day}`;
         },
         addEmployee() {
-            var newEmployee = {
-                ...this.employee,
-                employeedDate: new Date(this.employee.employeedDate)
-            };
-            axios.post('http://localhost:3000/employees', newEmployee)
-                .then(res => {
-                    console.log(res)
-                    this.$router.push('/employees/edit/' + res.data.id)
-                })
-                .catch(error => { console.log(error) })
+            this.$refs.form.validate().then((validateResult) => {
+                if (validateResult.valid) {
+                    var newEmployee = {
+                        ...this.employee,
+                        employeedDate: new Date(this.employee.employeedDate)
+                    };
+                    axios.post('http://localhost:3000/employees', newEmployee)
+                        .then(res => {
+                            console.log(res)
+                            this.$router.push('/employees/edit/' + res.data.id)
+                        })
+                        .catch(error => { console.log(error) })
+                } else {
+                    console.log('Form is not valid');
+                }
+            });
         },
-        editProject() {
-            var editedEmployee = {
-                ...this.employee,
-                employeedDate: new Date(this.employee.employeedDate)
-            };
-            axios.put(`http://localhost:3000/employees/${this.employeeId}`, editedEmployee)
-                .then(res => { console.log(res) })
-                .catch(error => { console.log(error) })
+        editEmployee() {
+            this.$refs.form.validate().then((validateResult) => {
+                if (validateResult.valid) {
+                    var editedEmployee = {
+                        ...this.employee,
+                        employeedDate: new Date(this.employee.employeedDate)
+                    };
+                    axios.put(`http://localhost:3000/employees/${this.employeeId}`, editedEmployee)
+                        .then(res => { console.log(res) })
+                        .catch(error => { console.log(error) })
+                } else {
+                    console.log('Form is not valid');
+                }
+            });
         }
     },
     mounted() {
