@@ -44,14 +44,21 @@ const routes = [
   },
   {
     path: '/employees',
-    name: 'employees',
+    name: 'EmployeesPage',
     component: EmployeesPage
   },
   {
-    path: '/employee',
-    name: 'employee',
-    component: EmployeePage
-  }
+    path: '/employees/edit/:id',
+    name: 'EmployeePageEdit',
+    component: EmployeePage,
+    props: { isAdd: false } // Pass route params as props to the component
+  },
+  {
+    path: '/employees/add',
+    name: 'EmployeePageAdd',
+    component: EmployeePage,
+    props: { isAdd: true } // Pass route params as props to the component
+  },
 ]
 
 const router = createRouter({

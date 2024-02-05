@@ -9,7 +9,7 @@
       <v-btn text href="/">Logout</v-btn>
     </v-toolbar>
     <v-content>
-      <router-view />
+      <router-view :key="$route.path" />
     </v-content>
   </v-app>
 </template>

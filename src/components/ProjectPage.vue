@@ -53,7 +53,9 @@ export default {
                 projectEndDate: new Date(this.project.projectEndDate),
             };
             axios.post('http://localhost:3000/projects', newProject)
-                .then(res => { console.log(res) })
+                .then(res => {
+                    console.log(res)
+                    this.$router.push('/projects/edit/' + res.data.id) })
                 .catch(error => { console.log(error) })
         },
         editProject() {

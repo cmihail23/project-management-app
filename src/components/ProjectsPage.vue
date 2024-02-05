@@ -2,11 +2,11 @@
     <div>
         <div>
             <v-row justify="end">
-            <v-spacer/>
-            <v-col class="d-flex justify-end">        
-                <v-btn color="success" class="mt-2">Add project</v-btn>
-            </v-col>
-          </v-row>
+                <v-spacer />
+                <v-col class="d-flex justify-end">
+                    <v-btn v-on:click.prevent="addProject()" color="success" class="mt-2">Add project</v-btn>
+                </v-col>
+            </v-row>
         </div>
         <div v-for="(project, index) in  projects " :key="index" class="mt-3">
             <v-card>
@@ -26,8 +26,8 @@
                         </v-col>
                         <v-col>
                             <v-card-actions class="d-flex justify-end">
-                                <v-btn variant="outlined" size="large" v-on:click.prevent="this.openProject(project.id)">
-                                    Open
+                                <v-btn variant="outlined" size="large" v-on:click.prevent="this.editProject(project.id)">
+                                    Edit
                                 </v-btn>
                                 <v-btn variant="outlined" size="large" v-on:click.prevent="this.deleteProject(project.id)">
                                     Delete
@@ -51,7 +51,7 @@ export default {
             projects: []
         };
     }, methods: {
-        openProject(projectId) {
+        editProject(projectId) {
             this.$router.push('/projects/edit/' + projectId)
         },
         deleteProject(projectId) {
@@ -61,6 +61,9 @@ export default {
             }).catch(error => {
                 console.log(error)
             })
+        },
+        addProject() {
+            this.$router.push('/projects/add')
         }
     },
     mounted() {
